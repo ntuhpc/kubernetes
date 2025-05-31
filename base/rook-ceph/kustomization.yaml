@@ -3,7 +3,9 @@ kind: Kustomization
 resources:
   - namespace.yaml
 helmCharts:
-  # CNI: cillium
+  # rook operator
   - repo: https://charts.rook.io/release
-    name: cilium
-    namespace: kube-system
+    name: rook-ceph
+    namespace: rook-ceph
+    valuesInline:
+      enableDiscoveryDaemon: true
