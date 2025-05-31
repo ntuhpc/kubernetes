@@ -1,2 +1,2 @@
 # kubernetes
-Kubernetes manfiests for NTUHPC
+Kubernetes manifests for NTUHPC
