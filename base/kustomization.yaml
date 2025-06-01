@@ -8,7 +8,9 @@ resources:
   # cert manager
   - https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.yaml
   # monitoring stack: kube-prometheus stack
-  - ./kube-prometheus
+  - kube-prometheus
+  # storage: PVE ceph cluster
+  - rook-ceph
 
 helmCharts:
   # CNI: cillium
