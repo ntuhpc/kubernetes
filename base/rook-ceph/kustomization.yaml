@@ -5,5 +5,7 @@ resources:
   - https://raw.githubusercontent.com/rook/rook/refs/tags/v1.17.3/deploy/examples/crds.yaml
   - https://raw.githubusercontent.com/rook/rook/refs/tags/v1.17.3/deploy/examples/operator.yaml
   - https://raw.githubusercontent.com/rook/rook/refs/tags/v1.17.3/deploy/examples/common.yaml
-  - https://raw.githubusercontent.com/rook/rook/refs/tags/v1.17.3/deploy/examples/common-external.yaml
-  - https://raw.githubusercontent.com/rook/rook/refs/tags/v1.17.3/deploy/examples/cluster-external.yaml
+  # patched ceph cluster
+  - cluster-external.yaml
+  # patched storage classes
+  - storage-class
