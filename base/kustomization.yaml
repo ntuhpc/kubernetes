@@ -9,6 +9,7 @@ resources:
   - kube-prometheus
   # storage: PVE ceph cluster
   - rook-ceph
+  - rbac
 helmCharts:
   # CNI & ingress: cillium
   - repo: https://helm.cilium.io
