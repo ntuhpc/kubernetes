@@ -19,7 +19,7 @@ Rook Cepth deployment has been tailored to use externally managed Ceph deployed 
 3. Paste the `export ...` into your shell to apply the Ceph configuration.
 4. Run the [Import Script](./scripts/import_rook_secrets.sh) to import secrets.
 
-## Contributing
+## Usage
 
 Configure access to the Kubernetes cluster, edit manifests, then diff changes:
 
@@ -126,6 +126,10 @@ kubectl delete namespace team
 
 This will automatically delete all resources within the namespace, including the user ServiceAccount and RoleBinding.
 
+
+## Contributing
+
+Please submit a pull request to make changes.
 ### References
 
 - [Kubernetes RBAC](https://kubernetes.io/docs/reference/access-authn-authz/rbac/)
