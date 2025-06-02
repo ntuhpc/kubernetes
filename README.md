@@ -19,9 +19,15 @@ Rook Cepth deployment has been tailored to use externally managed Ceph deployed 
 3. Paste the `export ...` into your shell to apply the Ceph configuration.
 4. Run the [Import Script](./scripts/import_rook_secrets.sh) to import secrets.
 
-## Usage
+## Contributing
 
-Configure access to the Kubernetes cluster, then apply manifests:
+Configure access to the Kubernetes cluster, edit manifests, then diff changes:
+
+```
+make diff
+```
+
+Apply changes if all is well:
 
 ```
 make apply
