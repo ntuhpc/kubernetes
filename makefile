@@ -12,7 +12,7 @@ KUBECTL:=kubectl
 apply: manifests.yaml
 	$(KUBECTL) apply --force-conflicts --server-side -f $<
 
-diff:
+diff: manifests.yaml
 	$(KUBECTL) diff -f $<
 
 manifests.yaml:
