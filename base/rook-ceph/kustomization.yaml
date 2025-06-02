@@ -8,4 +8,6 @@ resources:
   # patched ceph cluster
   - cluster-external.yaml
   # patched storage classes
-  - storage-class
+  - storage-class/ceph-rbd.yaml
+  - storage-class/cephfs.yaml
+  - storage-class/localpath.yaml
