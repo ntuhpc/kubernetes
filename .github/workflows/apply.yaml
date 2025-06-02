@@ -1,0 +1,32 @@
+#
+# NTUHPC
+# Kubernetes
+# Github Actions: Apply Manifests
+#
+
+on:
+  workflow_dispatch:
+  push: {}
+jobs:
+  apply:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: 'v1.32.5'
+      - uses: azure/setup-helm@v4
+        with:
+          version: 'v3.15.1'
+      - name: Install kubeconfig credentials
+        run: |
+          echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
+          echo "KUBECONFIG=kubeconfig.yaml" >> $GITHUB_ENV
+      - name: Diff manifests with Kubernetes cluster
+        run: make diff
+      - name: Apply manifests to Kubernetes cluster
+        # only apply on main branch
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: make apply
