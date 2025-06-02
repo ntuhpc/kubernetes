@@ -5,8 +5,10 @@
 #
 
 on:
-  workflow_dispatch:
-  push: {}
+  push: 
+    paths-ignore:
+      - .gitignore
+      - README.md
 jobs:
   apply:
     runs-on: ubuntu-24.04
@@ -26,6 +28,8 @@ jobs:
           echo "KUBECONFIG=kubeconfig.yaml" >> $GITHUB_ENV
           KUBECONFIG=kubeconfig.yaml kubectl version
       - name: Diff manifests with Kubernetes cluster
+        # diff will return nonzero status on changes, safe to continue
+        continue-on-error: true
         run: make diff
       - name: Apply manifests to Kubernetes cluster
         # only apply on main branch
