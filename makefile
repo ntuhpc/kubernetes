@@ -4,12 +4,19 @@
 # Makefile
 #
 
+
 KUBECTL:=kubectl
 
-.PHONY: diff
+.PHONY: diff clean
 
-apply:
-	 $(KUBECTL) kustomize --enable-helm base | $(KUBECTL) apply --force-conflicts --server-side -f -
+apply: manifests.yaml
+	$(KUBECTL) apply --force-conflicts --server-side -f $<
 
 diff:
-	 $(KUBECTL) kustomize --enable-helm base | $(KUBECTL) diff -f -
+	$(KUBECTL) diff -f $<
+
+manifests.yaml:
+	$(KUBECTL) kustomize --enable-helm base >$@
+
+clean:
+	rm -rf manifests.yaml
