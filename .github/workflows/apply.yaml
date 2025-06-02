@@ -24,6 +24,7 @@ jobs:
         run: |
           echo "${{ secrets.KUBECONFIG }}" > kubeconfig.yaml
           echo "KUBECONFIG=kubeconfig.yaml" >> $GITHUB_ENV
+          KUBECONFIG=kubeconfig.yaml kubectl version
       - name: Diff manifests with Kubernetes cluster
         run: make diff
       - name: Apply manifests to Kubernetes cluster
