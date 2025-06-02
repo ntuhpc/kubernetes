@@ -68,6 +68,22 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 ```
 
+4. Create system resource quota for the namespace to limit resource usage:
+```yaml
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: quota
+  namespace: team
+spec:
+  hard:
+    requests.cpu: "10"                # total CPU requested (cores)
+    limits.cpu: "20"                  # total CPU limit
+    requests.memory: "32Gi"           # total memory requested
+    limits.memory: "64Gi"             # total memory limit
+    requests.nvidia.com/gpu: "4"      # total GPUs requested (NVIDIA GPU example)
+```
+
 4. Create a long-lived token for the user:
 
 ```sh
