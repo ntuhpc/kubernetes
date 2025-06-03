@@ -46,35 +46,29 @@ metadata:
   name: team
 ```
 
-2. Creating a `ServiceAccount` to allow users to deploy applications in the namespace:
-
-```yaml
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: user
-  namespace: team
-```
-
-3. Creating a `RoleBinding` to allow users to access the namespace:
+2. Creating a `RoleBinding` to allow users to access the namespace:
 
 ```yaml
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: team-user-binding
+  name: team-bind
   namespace: team
-subjects:
-  - kind: ServiceAccount
-    name: user
-    namespace: team
 roleRef:
   kind: ClusterRole
-  name: user
+  name: namespace-user
   apiGroup: rbac.authorization.k8s.io
+subjects:
+  - kind: User
+    name: "member0@e.ntu.edu.sg"
+    apiGroup: rbac.authorization.k8s.io
+  - kind: User
+    name: "member1@e.ntu.edu.sg"
+    apiGroup: rbac.authorization.k8s.io
+ # ... include other team members ..
 ```
 
-4. Create system resource quota for the namespace to limit resource usage:
+3. Create system resource quota for the namespace to limit resource usage:
 ```yaml
 apiVersion: v1
 kind: ResourceQuota
@@ -87,45 +81,16 @@ spec:
     limits.cpu: "20"                  # total CPU limit
     requests.memory: "32Gi"           # total memory requested
     limits.memory: "64Gi"             # total memory limit
-    requests.nvidia.com/gpu: "4"      # total GPUs requested (NVIDIA GPU example)
+    requests.nvidia.com/gpu: "4"      # total GPUs requested (NVIDIA GPU)
 ```
 
-4. Create a long-lived token for the user:
-
-```sh
-kubectl create token -n team user --duration=750h # ~31 days
-```
-
-5. Generate kubeconfig for the user. This should be sent to the user as credentials into the cluster:
-
-```yaml
-apiVersion: v1
-clusters:
-  - cluster:
-      certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUJkekNDQVIyZ0F3SUJBZ0lCQURBS0JnZ3Foa2pPUFFRREFqQWpNU0V3SHdZRFZRUUREQmhyTTNNdGMyVnkKZG1WeUxXTmhRREUzTkRnM05EVTRORGt3SGhjTk1qVXdOakF4TURJME5EQTVXaGNOTXpVd05UTXdNREkwTkRBNQpXakFqTVNFd0h3WURWUVFEREJock0zTXRjMlZ5ZG1WeUxXTmhRREUzTkRnM05EVTRORGt3V1RBVEJnY3Foa2pPClBRSUJCZ2dxaGtqT1BRTUJCd05DQUFTUHc0SHhBSnhXdDAwdkxoZ0hQQ0UyUk1yc3E1cjZDN1hlYVEvRFBkV0IKU2o3RnlsTE5zQStPOTVmMWM2UFJXaGZpd1BkTFR0U2RkcVZBQjlUYUIvczVvMEl3UURBT0JnTlZIUThCQWY4RQpCQU1DQXFRd0R3WURWUjBUQVFIL0JBVXdBd0VCL3pBZEJnTlZIUTRFRmdRVTNuSGs4OTR2S0pRS0pBVDFyQzVjCnQrVjRkaG93Q2dZSUtvWkl6ajBFQXdJRFNBQXdSUUlnRjE4aGU4N2JDVDZhYTZyQmNqY1gzVU1leVZwQUlLT2YKeG95OTI2eExwR1VDSVFDMzRHd0JxNzVaRzk0WU91bGJrUWcwK2c0dEx6UVhFSG1iODdpNzlXcndPUT09Ci0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0K
-      server: https://18.140.123.46:6443
-    name: default
-contexts:
-  - context:
-      cluster: default
-      user: default
-    name: default
-current-context: default
-kind: Config
-preferences: {}
-users:
-  - name: default
-    user: <token from kubectl create token>
-```
-
-7. Once the end users are done with the cluster, cleanup by deleting the namespace:
+4. Once the end users are done with the cluster, cleanup by deleting the namespace:
 
 ```sh
 kubectl delete namespace team
 ```
 
 This will automatically delete all resources within the namespace, including the user ServiceAccount and RoleBinding.
-
 
 ## Contributing
 
