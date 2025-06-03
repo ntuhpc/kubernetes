@@ -1,26 +1,33 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
+  # gateway api
+  - https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.3.0/standard-install.yaml
   # nvidia-device-plugin
   - https://raw.githubusercontent.com/NVIDIA/k8s-device-plugin/v0.17.2/deployments/static/nvidia-device-plugin.yml
-  # cert manager
-  - https://github.com/cert-manager/cert-manager/releases/download/v1.17.2/cert-manager.yaml
   # monitoring stack: kube-prometheus stack
   - kube-prometheus
   # storage: PVE ceph cluster
   - rook-ceph
+  # cert manager
+  - cert-manager
+  # networking
+  - network
+  # dex: identity provider
+  - dex
+  # access control
   - rbac
 helmCharts:
-  # CNI & ingress: cillium
+  # CNI & ingress: cilium
   - repo: https://helm.cilium.io
     name: cilium
     namespace: kube-system
     valuesInline:
-      # needed for ingressController
+      # needed for ingressController & gateway api support
       nodePort:
         enabled: true
-      ingressController:
+      gatewayAPI:
         enabled: true
-        default: true
-        # share 1 loadbalancer service for all ingress resources
-        loadbalancerMode: shared
+        # ensure gateway class is created as it expected by cilium-operator
+        gatewayClass:
+          create: "true"

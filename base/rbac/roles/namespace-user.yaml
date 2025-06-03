@@ -1,0 +1,48 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: namespace-user
+rules:
+  # workload controllers: deployments, statefulsets, daemonsets, replicasets
+  - apiGroups: ["apps"]
+    resources: ["*"]
+    verbs: ["*"]
+
+  # batch workloads: jobs and cronjobs
+  - apiGroups: ["batch"]
+    resources: ["*"]
+    verbs: ["*"]
+
+  # HTTPRoute only (Gateway API)
+  - apiGroups: ["gateway.networking.k8s.io"]
+    resources: ["httproutes"]
+    verbs: ["*"]
+
+  # core resources needed for workload management
+  - apiGroups: [""]
+    resources:
+      - "pods"
+      - "pods/log"
+      - "services"
+      - "endpoints"
+      - "configmaps"
+      - "secrets"
+      - "serviceaccounts"
+      - "events"
+      - "persistentvolumeclaims"
+      - "replicationcontrollers"
+    verbs: ["*"]
+
+  # metrics for kubectl top pods
+  - apiGroups: ["metrics.k8s.io"]
+    resources: ["*"]
+    verbs: ["*"]
+
+  # autoscaling: Horizontal Pod Autoscalers etc.
+  - apiGroups: ["autoscaling"]
+    resources: ["*"]
+    verbs: ["*"]
+
+  # non-resource URLs for kubectl cluster-info and health checks
+  - nonResourceURLs: ["/version", "/healthz", "/livez", "/readyz", "/api", "/apis"]
+    verbs: ["get"]
