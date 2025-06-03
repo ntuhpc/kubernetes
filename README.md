@@ -66,10 +66,12 @@ users:
 export KUBECONFIG=ntuhpc.yaml
 ```
 
-or pass `--kubeconfig ntuhpc.yaml` option when using `kubectl` commands. 4. Verify the cluster access:
+or pass `--kubeconfig ntuhpc.yaml` option when using `kubectl` commands.
+
+4. Verify the cluster access:
 
 ```sh
-kubectl get nodes
+kubectl version
 ```
 
 ## Contributing
